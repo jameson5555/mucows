@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimum-scale=1">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Mucows!">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/mucows-icon.png" />
+
+    <title>Attack of the Mucows</title>
+    <style>
+    	html {
+    		background-color: #000000;
+    	}
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            text-align: center;
+        }
+        canvas {
+        	width: 100%;
+        	height: auto;
+        	max-width: 100vw;
+        	max-height: 100vh;
+        }
+    </style>
+    <script src="js/pixi.js"></script>
+</head>
+<body>
+    <script>
+ 
+ 	// global variables
+ 	var gameOver = false;
+ 	var spinCows = false;
+ 	var xSpeed = 0.1;
+ 	var ySpeed = 0;
+ 	var canvasWidth = 2000;
+ 	var canvasHeight = 1200;
+ 	var galaxySize = canvasWidth*2;
+ 	var enemySpeedX = 0.04;
+ 	var enemySpeedY = 0;
+ 	var enemyVelocity = 3;
+ 	var planetSpeedX = 0;
+ 	var planetSpeedY = 0;
+ 	var planetVelocity = 1.5;
+ 	var planet1Destroyed = false;
+ 	var planet2Destroyed = false;
+ 	var planet3Destroyed = false;
+ 	var planet4Destroyed = false;
+ 	var planet5Destroyed = false;
+ 	var planet6Destroyed = false;
+ 	var planet7Destroyed = false;
+ 	var planet8Destroyed = false;
+ 	var enemy1PositionX = randomPlace('x');
+ 	var enemy1PositionY = randomPlace('y');
+ 	var enemy2PositionX = randomPlace('x');
+ 	var enemy2PositionY = randomPlace('y');
+ 	var enemy3PositionX = randomPlace('x');
+ 	var enemy3PositionY = randomPlace('y');
+ 	var enemy4PositionX = randomPlace('x');
+ 	var enemy4PositionY = randomPlace('y');
+ 	var enemy5PositionX = randomPlace('x');
+ 	var enemy5PositionY = randomPlace('y');
+ 	var enemy6PositionX = randomPlace('x');
+ 	var enemy6PositionY = randomPlace('y');
+ 	var enemy7PositionX = randomPlace('x');
+ 	var enemy7PositionY = randomPlace('y');
+ 	var enemy8PositionX = randomPlace('x');
+ 	var enemy8PositionY = randomPlace('y');
+ 	var enemy9PositionX = randomPlace('x');
+ 	var enemy9PositionY = randomPlace('y');
+ 	var enemy10PositionX = randomPlace('x');
+ 	var enemy10PositionY = randomPlace('y');
+ 	var planet1PositionX = randomPlace('x');
+ 	var planet1PositionY = randomPlace('y');
+ 	var planet2PositionX = randomPlace('x');
+ 	var planet2PositionY = randomPlace('y');
+ 	var planet3PositionX = randomPlace('x');
+ 	var planet3PositionY = randomPlace('y');
+ 	var planet4PositionX = randomPlace('x');
+ 	var planet4PositionY = randomPlace('y');
+ 	var planet5PositionX = randomPlace('x');
+ 	var planet5PositionY = randomPlace('y');
+ 	var planet6PositionX = randomPlace('x');
+ 	var planet6PositionY = randomPlace('y');
+ 	var planet7PositionX = randomPlace('x');
+ 	var planet7PositionY = randomPlace('y');
+ 	var planet8PositionX = randomPlace('x');
+ 	var planet8PositionY = randomPlace('y');
+ 	var scoreNum = '0';
+ 	var count = 0;
+
+    // create an new instance of a pixi stage
+    var stage = new PIXI.Stage(0x000000);
+ 
+    // create a renderer instance.
+    var renderer = PIXI.autoDetectRenderer(canvasWidth, canvasHeight);
+ 
+    // add the renderer view element to the DOM
+    document.body.appendChild(renderer.view);
+ 
+    requestAnimFrame(animate);
+
+    // create a texture from an image path
+    var starsTexture = PIXI.Texture.fromImage("assets/stars.jpg");
+    var mucowsTexture = PIXI.Texture.fromImage("assets/mucows.png");
+    var buttonTexture = PIXI.Texture.fromImage("assets/nav-square.png");
+    var enemyTexture = PIXI.Texture.fromImage("assets/enemy.gif");
+    var planet1Texture = PIXI.Texture.fromImage("assets/earth-transparent-300x300.png");
+    var planet2Texture = PIXI.Texture.fromImage("assets/jupiter-transparent-300x300.png");
+    var planet3Texture = PIXI.Texture.fromImage("assets/mars-transparent-300x300.png");
+    var planet4Texture = PIXI.Texture.fromImage("assets/mercury-transparent-300x300.png");
+    var planet5Texture = PIXI.Texture.fromImage("assets/neptune-transparent-300x300.png");
+    var planet6Texture = PIXI.Texture.fromImage("assets/saturn-transparent-300x300.png");
+    var planet7Texture = PIXI.Texture.fromImage("assets/uranus-transparent-300x300.png");
+    var planet8Texture = PIXI.Texture.fromImage("assets/venus-transparent-300x300.png");
+
+    // create sprites
+	var stars = new PIXI.TilingSprite(starsTexture, canvasWidth, canvasHeight);
+    var mucows = new PIXI.Sprite(mucowsTexture);
+    var leftButton = new PIXI.Sprite(buttonTexture);
+    var rightButton = new PIXI.Sprite(buttonTexture);
+    var upButton = new PIXI.Sprite(buttonTexture);
+    var downButton = new PIXI.Sprite(buttonTexture);
+    var enemy1 = new PIXI.Sprite(enemyTexture);
+    var enemy2 = new PIXI.Sprite(enemyTexture);
+    var enemy3 = new PIXI.Sprite(enemyTexture);
+    var enemy4 = new PIXI.Sprite(enemyTexture);
+    var enemy5 = new PIXI.Sprite(enemyTexture);
+    var enemy6 = new PIXI.Sprite(enemyTexture);
+    var enemy7 = new PIXI.Sprite(enemyTexture);
+    var enemy8 = new PIXI.Sprite(enemyTexture);
+    var enemy9 = new PIXI.Sprite(enemyTexture);
+    var enemy10 = new PIXI.Sprite(enemyTexture);
+    var planet1 = new PIXI.Sprite(planet1Texture);
+    var planet2 = new PIXI.Sprite(planet2Texture);
+    var planet3 = new PIXI.Sprite(planet3Texture);
+    var planet4 = new PIXI.Sprite(planet4Texture);
+    var planet5 = new PIXI.Sprite(planet5Texture);
+    var planet6 = new PIXI.Sprite(planet6Texture);
+    var planet7 = new PIXI.Sprite(planet7Texture);
+    var planet8 = new PIXI.Sprite(planet8Texture);
+    var score = new PIXI.Text("Planets Captured: " + scoreNum,
+    	{font: "bold 60px Futura, 'Trebuchet MS', Arial, sans-serif", fill: "rgba(255,255,255,0.9)", align: "center"});
+    var restart = new PIXI.Text("Restart?",
+    	{font: "bold 60px Futura, 'Trebuchet MS', Arial, sans-serif", fill: "rgba(255,255,255,0.9)", align: "center"});
+    var alert = new PIXI.Text("",
+    	{font: "bold 60px Futura, 'Trebuchet MS', Arial, sans-serif", fill: "rgba(255,255,255,0.9)", align: "center"});
+    var galaxy = new PIXI.Graphics();
+    galaxy.lineStyle(0, 0xFFFFFF);
+    galaxy.drawCircle(canvasWidth/2,canvasHeight/2,galaxySize);
+    
+	// sizes
+    mucows.scale.x = 0.4;
+    mucows.scale.y = 0.4;
+    leftButton.scale.x = 2;
+    leftButton.scale.y = 1; 
+    rightButton.scale.x = 2;
+    rightButton.scale.y = 1;
+    upButton.scale.x = 2;
+    upButton.scale.y = 1;
+    downButton.scale.x = 2;
+    downButton.scale.y = 1;
+    enemy1.scale.x = 0.5;
+    enemy1.scale.y = 0.5;
+    enemy2.scale.x = 0.5;
+    enemy2.scale.y = 0.5;
+    enemy3.scale.x = 0.5;
+    enemy3.scale.y = 0.5;
+    enemy4.scale.x = 0.5;
+    enemy4.scale.y = 0.5;
+    enemy5.scale.x = 0.5;
+    enemy5.scale.y = 0.5;
+    enemy6.scale.x = 0.5;
+    enemy6.scale.y = 0.5;
+    enemy7.scale.x = 0.5;
+    enemy7.scale.y = 0.5;
+    enemy8.scale.x = 0.5;
+    enemy8.scale.y = 0.5;
+    enemy9.scale.x = 0.5;
+    enemy9.scale.y = 0.5;
+    enemy10.scale.x = 0.5;
+    enemy10.scale.y = 0.5;
+
+    // set anchor points
+    mucows.anchor.x = 0.5;
+    mucows.anchor.y = 0.5;
+ 
+    // position items
+    stars.tilePosition.x = 0;
+    stars.tilePosition.y = 0;
+    mucows.position.x = canvasWidth/2;
+    mucows.position.y = canvasHeight/2;
+    leftButton.position.x = 80;
+    leftButton.position.y = canvasHeight - 300;
+    rightButton.position.x = 310;
+    rightButton.position.y = canvasHeight - 300;
+    upButton.position.x = 200;
+    upButton.position.y = canvasHeight - 420;
+    downButton.position.x = 200;
+    downButton.position.y = canvasHeight - 180;
+    enemy1.position.x = enemy1PositionX;
+    enemy1.position.y = enemy1PositionY;
+    enemy2.position.x = enemy2PositionX;
+    enemy2.position.y = enemy2PositionY;
+    enemy3.position.x = enemy3PositionX;
+    enemy3.position.y = enemy3PositionY;
+    enemy4.position.x = enemy4PositionX;
+    enemy4.position.y = enemy4PositionY;
+    enemy5.position.x = enemy5PositionX;
+    enemy5.position.y = enemy5PositionY;
+    enemy6.position.x = enemy6PositionX;
+    enemy6.position.y = enemy6PositionY;
+    enemy7.position.x = enemy7PositionX;
+    enemy7.position.y = enemy7PositionY;
+    enemy8.position.x = enemy8PositionX;
+    enemy8.position.y = enemy8PositionY;
+    enemy9.position.x = enemy9PositionX;
+    enemy9.position.y = enemy9PositionY;
+    enemy10.position.x = enemy10PositionX;
+    enemy10.position.y = enemy10PositionY;
+    planet1.position.x = planet1PositionX;
+    planet1.position.y = planet1PositionY;
+    planet2.position.x = planet2PositionX;
+    planet2.position.y = planet2PositionY;
+    planet3.position.x = planet3PositionX;
+    planet3.position.y = planet3PositionY;
+    planet4.position.x = planet4PositionX;
+    planet4.position.y = planet4PositionY;
+    planet5.position.x = planet5PositionX;
+    planet5.position.y = planet5PositionY;
+    planet6.position.x = planet6PositionX;
+    planet6.position.y = planet6PositionY;
+    planet7.position.x = planet7PositionX;
+    planet7.position.y = planet7PositionY;
+    planet8.position.x = planet8PositionX;
+    planet8.position.y = planet8PositionY;
+    score.position.x = canvasWidth/2 - score.width/2;
+    score.position.y = canvasHeight/33;
+    restart.position.x = (canvasWidth - canvasWidth/33) - restart.width;
+    restart.position.y = canvasHeight/33;
+    alert.position.x = (canvasWidth/33) - alert.width;
+    alert.position.y = canvasHeight/33;
+ 
+ 	// add to stage
+ 	stage.addChild(stars);
+ 	stage.addChild(planet1);
+ 	stage.addChild(planet2);
+ 	stage.addChild(planet3);
+ 	stage.addChild(planet4);
+ 	stage.addChild(planet5);
+ 	stage.addChild(planet6);
+ 	stage.addChild(planet7);
+ 	stage.addChild(planet8);
+ 	stage.addChild(enemy1);
+ 	stage.addChild(enemy2);
+ 	stage.addChild(enemy3);
+ 	stage.addChild(enemy4);
+ 	stage.addChild(enemy5);
+ 	stage.addChild(enemy6);
+ 	stage.addChild(enemy7);
+ 	stage.addChild(enemy8);
+ 	stage.addChild(enemy9);
+ 	stage.addChild(enemy10);
+    stage.addChild(mucows);
+    stage.addChild(leftButton);
+    stage.addChild(rightButton);
+    stage.addChild(upButton);
+    stage.addChild(downButton);
+    stage.addChild(score);
+    stage.addChild(alert);
+    stage.addChild(galaxy);
+    
+
+    // interactive elements
+    mucows.setInteractive(true);
+    leftButton.setInteractive(true);
+    rightButton.setInteractive(true);
+    upButton.setInteractive(true);
+    downButton.setInteractive(true);
+    restart.setInteractive(true);
+
+    // hover cursors
+    leftButton.buttonMode = true;
+    rightButton.buttonMode = true;
+    upButton.buttonMode = true;
+    downButton.buttonMode = true;
+    restart.buttonMode = true;
+
+    /* Need a way to get audio working on iOS */
+ //    var muShip = new Audio();
+	// muShip.setAttribute("src","assets/muship.mp3");
+	// muShip.load();
+
+	// var moo = new Audio();
+	// moo.setAttribute('src','assets/moo.mp3');
+	// moo.load();
+
+    // clicks
+	leftButton.click = leftButton.tap = function() {
+		xSpeed = xSpeed - 1;
+		enemySpeedX = enemySpeedX - enemyVelocity;
+		planetSpeedX = planetSpeedX - planetVelocity;
+		this.alpha = 1;
+	}
+	rightButton.click = rightButton.tap = function() {
+		xSpeed = xSpeed + 1;
+		enemySpeedX = enemySpeedX + enemyVelocity;
+		planetSpeedX = planetSpeedX + planetVelocity;
+		this.alpha = 1;
+	}
+	upButton.click = upButton.tap = function() {
+		ySpeed = ySpeed - 1;
+		enemySpeedY = enemySpeedY - enemyVelocity;
+		planetSpeedY = planetSpeedY - planetVelocity;
+		this.alpha = 1;
+	}
+	downButton.click = downButton.tap = function() {
+		ySpeed = ySpeed + 1;
+		enemySpeedY = enemySpeedY + enemyVelocity;
+		planetSpeedY = planetSpeedY + planetVelocity;
+		this.alpha = 1;
+	}
+	restart.click = restart.tap = function() {
+		location.reload();
+	}
+
+	// arrow key controls
+	document.addEventListener('keydown', function(event) {
+	    if(event.keyCode == 37) stage.children[20].click();
+	    else if(event.keyCode == 39) stage.children[21].click();
+	    else if(event.keyCode == 38) stage.children[22].click();
+	    else if(event.keyCode == 40) stage.children[23].click();
+	});
+
+	// mucow vulnerability zone
+    var muRight = canvasWidth/2 + canvasWidth/8;
+ 	var muLeft = canvasWidth/2 - canvasWidth/8;
+ 	var muTop = (canvasHeight/2 - canvasWidth/10);
+ 	var muBottom = (canvasHeight/2 + canvasWidth/17);
+ 	
+ 
+    function animate() {
+        requestAnimFrame(animate);
+ 	
+ 		stars.tilePosition.x -= xSpeed;
+ 		stars.tilePosition.y -= ySpeed;
+ 		galaxy.position.x -= xSpeed;
+ 		galaxy.position.y -= ySpeed;
+
+ 		if (galaxy.position.x > galaxySize) alert.setText("You've left the galaxy!\nGo back to the right.");
+ 		else if (galaxy.position.x < -galaxySize) alert.setText("You've left the galaxy!\nGo back to the left.");
+ 		else if (galaxy.position.y > galaxySize) alert.setText("You've left the galaxy!\nGo back down.");
+ 		else if (galaxy.position.y < -galaxySize) alert.setText("You've left the galaxy!\nGo back up.");
+ 		else alert.setText('');
+
+ 		enemy1.position.x -= enemySpeedX;
+ 		enemy1.position.y -= enemySpeedY;
+ 		enemy2.position.x -= enemySpeedX;
+ 		enemy2.position.y -= enemySpeedY;
+ 		enemy3.position.x -= enemySpeedX;
+ 		enemy3.position.y -= enemySpeedY;
+ 		enemy4.position.x -= enemySpeedX;
+ 		enemy4.position.y -= enemySpeedY;
+ 		enemy5.position.x -= enemySpeedX;
+ 		enemy5.position.y -= enemySpeedY;
+ 		enemy6.position.x -= enemySpeedX;
+ 		enemy6.position.y -= enemySpeedY;
+ 		enemy7.position.x -= enemySpeedX;
+ 		enemy7.position.y -= enemySpeedY;
+ 		enemy8.position.x -= enemySpeedX;
+ 		enemy8.position.y -= enemySpeedY;
+ 		enemy9.position.x -= enemySpeedX;
+ 		enemy9.position.y -= enemySpeedY;
+ 		enemy10.position.x -= enemySpeedX;
+ 		enemy10.position.y -= enemySpeedY;
+ 		planet1.position.x -= planetSpeedX;
+ 		planet1.position.y -= planetSpeedY;
+ 		planet2.position.x -= planetSpeedX;
+ 		planet2.position.y -= planetSpeedY;
+ 		planet3.position.x -= planetSpeedX;
+ 		planet3.position.y -= planetSpeedY;
+ 		planet4.position.x -= planetSpeedX;
+ 		planet4.position.y -= planetSpeedY;
+ 		planet5.position.x -= planetSpeedX;
+ 		planet5.position.y -= planetSpeedY;
+ 		planet6.position.x -= planetSpeedX;
+ 		planet6.position.y -= planetSpeedY;
+ 		planet7.position.x -= planetSpeedX;
+ 		planet7.position.y -= planetSpeedY;
+ 		planet8.position.x -= planetSpeedX;
+ 		planet8.position.y -= planetSpeedY;
+
+ 		if (collision(enemy1) || collision(enemy2) || collision(enemy3) || collision(enemy4) || collision(enemy5) || collision(enemy6) || collision(enemy7) || collision(enemy8) || collision(enemy9) || collision(enemy10)) {
+			spinCows = true;
+			gameOver = true;
+			stage.addChild(restart);
+		}
+
+		if (!planet1Destroyed && collision(planet1)) {
+			planet1.alpha = 0;
+			increaseScore()
+			planet1Destroyed = true;
+		}
+		if (!planet2Destroyed && collision(planet2)) {
+			planet2.alpha = 0;
+			increaseScore()
+			planet2Destroyed = true;
+		}
+		if (!planet3Destroyed && collision(planet3)) {
+			planet3.alpha = 0;
+			increaseScore()
+			planet3Destroyed = true;
+		}
+		if (!planet4Destroyed && collision(planet4)) {
+			planet4.alpha = 0;
+			increaseScore()
+			planet4Destroyed = true;
+		}
+		if (!planet5Destroyed && collision(planet5)) {
+			planet5.alpha = 0;
+			increaseScore()
+			planet5Destroyed = true;
+		}
+		if (!planet6Destroyed && collision(planet6)) {
+			planet6.alpha = 0;
+			increaseScore()
+			planet6Destroyed = true;
+		}
+		if (!planet7Destroyed && collision(planet7)) {
+			planet7.alpha = 0;
+			increaseScore()
+			planet7Destroyed = true;
+		}
+		if (!planet8Destroyed && collision(planet8)) {
+			planet8.alpha = 0;
+			increaseScore()
+			planet8Destroyed = true;
+		}
+
+        if (spinCows) mucows.rotation += 0.1;
+
+        count++;
+		if(count == 25) {
+			count = 0;
+			leftButton.alpha = 0.7;
+		    rightButton.alpha = 0.7;
+		    upButton.alpha = 0.7;
+		    downButton.alpha = 0.7;
+		}
+        
+        // render the stage
+        renderer.render(stage);
+    }
+
+    // Randomly place stuff within the galaxy, as long as it doesn't collide with the player
+    function randomPlace(axis) {
+    	var muRight = canvasWidth/2 + canvasWidth/8;
+ 		var muLeft = canvasWidth/2 - canvasWidth/8;
+ 		var muTop = (canvasHeight/2 - canvasWidth/10);
+ 		var muBottom = (canvasHeight/2 + canvasWidth/17);
+    	var location = galaxySize/2 + (-(galaxySize/2) + Math.floor(Math.random() * (galaxySize)));
+    	if (axis = 'x') {
+    		if (location > muLeft && location < muRight) {
+	    		location = galaxySize/2 + (-(galaxySize/2) + Math.floor(Math.random() * (galaxySize)));
+	    	} else return location;
+    	} else {
+    		if (location > muTop && location < muBottom) {
+	    		location = galaxySize/2 + (-(galaxySize/2) + Math.floor(Math.random() * (galaxySize)));
+	    	} else return location;
+    	}
+    }
+
+    function increaseScore() {
+    	scoreNum++;
+    	if (scoreNum >= 8) score.setText('You win!!!');
+    		else score.setText('Planets Captured: ' + scoreNum + '/8');
+    }
+
+    function collision(i) {
+    	return i.position.x < muRight  &&  i.position.x > muLeft && i.position.y < muBottom &&  i.position.y > muTop;
+    }
+ 
+    </script>
+    </body>
+</html>
